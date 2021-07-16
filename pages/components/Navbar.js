@@ -40,19 +40,19 @@ export default function Navbar({props, main}) {
   }
   
   return (
-    <Container style={{width:'100% !important'}}>
+    <Container style={{width:'100% !important', position:'fixed', background:'white', zIndex:'99999'}}>
       <Grid style={{...devBorder, ...styles}}>
         <Grid.Column computer={2} only='computer'>
         </Grid.Column>
         <Grid.Column computer={12} mobile={16} tablet={16}>
           
-          <Grid style={{marginBottom:'-20px'}}>
-            <Grid.Column computer={4} only='computer'>
+          <Grid style={{marginBottom:'-20px', marginTop:'0px'}}>
+            <Grid.Column computer={4} mobile={16} tablet={16}>
               <a href="/">
                 <img src="/kitacerita-logo.png" style={{height:'32px'}} />
               </a>
             </Grid.Column>
-            <Grid.Column computer={8} mobile={16} tablet={16} style={{textAlign:'center'}}>
+            <Grid.Column computer={8} only='computer' style={{textAlign:'center'}}>
               <Search
                 // fluid
                 loading={loading}

@@ -44,7 +44,7 @@ export default class Layout extends Component {
           </Grid.Column>
           <Grid.Column computer={12} mobile={16} tablet={16}>
             
-            <Grid>
+            <Grid style={{marginTop:'64px'}}>
               <Grid.Column computer={4} only='computer'>
                 <Menu secondary pointing vertical style={{width:'100%'}}>
                   <Menu.Item
@@ -74,7 +74,9 @@ export default class Layout extends Component {
                 </Menu>
               </Grid.Column>
               <Grid.Column computer={12} mobile={16} tablet={16}>
-                {this.props.children}
+                <div style={{margin:'8px'}}>
+                  {this.props.children}
+                </div>
               </Grid.Column>
             </Grid>
 

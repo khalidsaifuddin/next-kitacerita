@@ -25,7 +25,8 @@ class Login extends Component {
                 <Grid.Column computer={8} mobile={16} tablet={16}>
                   
                   <Card centered fluid raised>
-                    <Card.Content>
+                    <Card.Content style={{textAlign:'center'}}>
+                      <h2>Login</h2>
                       <Form style={{textAlign:'center', marginBottom:'32px', marginTop:'32px'}} size={'large'}>
                         <Form.Field>
                           <label>Email/No.HP/Username</label>

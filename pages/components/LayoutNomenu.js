@@ -17,7 +17,7 @@ export default class LayoutNoMenu extends Component {
 
   render() {
     const {activeItem} = this.state
-    
+
     return (
       <div className="container">
         <Grid>
@@ -25,7 +25,7 @@ export default class LayoutNoMenu extends Component {
           </Grid.Column>
           <Grid.Column computer={12} mobile={16} tablet={16}>
             
-            <Grid>
+            <Grid style={{marginTop:'64px'}}>
               <Grid.Column computer={16} mobile={16} tablet={16}>
                 {this.props.children}
               </Grid.Column>
