@@ -6,6 +6,7 @@ import 'semantic-ui-css/semantic.min.css'
 import Layout from './components/Layout'
 import Navbar from './components/Navbar'
 import { withRouter } from 'next/router'
+import CardKategori from './components/cardKategori'
 
 class Kategori extends Component {
   render() {
@@ -17,7 +18,38 @@ class Kategori extends Component {
         </Head>
         <Navbar />
         <Layout>
-          isinya kategori
+          <h2>Kategori</h2>
+          {/* <div className="etalaseKategori"> */}
+          <Grid style={{padding:'8px'}}>
+            <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
+              <CardKategori minWidth={'100%'} maxWidth={'100%'} margin={'0px'} />
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
+              <CardKategori minWidth={'100%'} maxWidth={'100%'} margin={'0px'} />
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
+              <CardKategori minWidth={'100%'} maxWidth={'100%'} margin={'0px'} />
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
+              <CardKategori minWidth={'100%'} maxWidth={'100%'} margin={'0px'} />
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
+              <CardKategori minWidth={'100%'} maxWidth={'100%'} margin={'0px'} />
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
+              <CardKategori minWidth={'100%'} maxWidth={'100%'} margin={'0px'} />
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
+              <CardKategori minWidth={'100%'} maxWidth={'100%'} margin={'0px'} />
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
+              <CardKategori minWidth={'100%'} maxWidth={'100%'} margin={'0px'} />
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
+              <CardKategori minWidth={'100%'} maxWidth={'100%'} margin={'0px'} />
+            </Grid.Column>
+          </Grid>
+          {/* </div> */}
         </Layout>
       </div>
     )

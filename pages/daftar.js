@@ -6,17 +6,34 @@ import 'semantic-ui-css/semantic.min.css'
 import LayoutNoMenu from './components/LayoutNomenu'
 import Navbar from './components/Navbar'
 import { withRouter } from 'next/router'
-import GoogleLogin from 'react-google-login';
+import GoogleLogin from 'react-google-login'
 
 class Daftar extends Component {
   state = {
-    check_terms: false
+    check_terms: false,
+    params: {
+      password: null,
+      ulangi_password: null
+    }
   }
 
   checkTerms = () => {
     this.setState({
       check_terms: !this.state.check_terms
     })
+  }
+
+  setValue = (tipe) => (e) => {
+    
+    this.setState({
+      params:{
+        ...this.state.params,
+        [tipe]: e.currentTarget.value
+      }
+    },()=>{
+      console.log(this.state.params)
+    })
+
   }
 
   render() {
@@ -26,7 +43,7 @@ class Daftar extends Component {
           <title>KitaCerita - Daftar Pengguna Baru</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <Navbar />
+        <Navbar searchbar={false} loginButton={false} />
         <LayoutNoMenu>
 
               <Grid>
@@ -52,19 +69,19 @@ class Daftar extends Component {
                               <label>No.HP</label>
                               <input placeholder='No.HP...' />
                             </Form.Field>
-                            <Form.Field>
+                            <Form.Field error={(!this.state.params.password || this.state.params.password === '' ? true : false)}>
                               <label>Password</label>
-                              <input placeholder='Password...' type='password'/>
+                              <input placeholder='Password...' type='password' onChange={this.setValue('password')} />
                             </Form.Field>
-                            <Form.Field>
+                            <Form.Field error={(this.state.params.password !== this.state.params.ulangi_password ? true : false)}>
                               <label>Ulangi Password</label>
-                              <input placeholder='Ulangi Password...' type='password'/>
+                              <input placeholder='Ulangi Password...' type='password' onChange={this.setValue('ulangi_password')} />
                             </Form.Field>
                             <Form.Field>
                               <Checkbox onClick={this.checkTerms} checked={this.state.check_terms} label='Dengan mendaftar, Saya setuju dengan syarat dan ketentuan yang berlaku' />
                             </Form.Field>
                             <br/>
-                            <Button disabled={!this.state.check_terms} className="bawahCiri" size={'large'} fluid type='submit' color='violet' style={{display:'inline-flex', justifyContent:'center'}}>
+                            <Button circular disabled={!this.state.check_terms} className="bawahCiri" size={'large'} fluid type='submit' color='violet' style={{display:'inline-flex', justifyContent:'center'}}>
                               <Icon name="sign in alternate" style={{fontSize:'18px'}} />
                               Daftar
                             </Button>

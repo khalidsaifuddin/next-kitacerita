@@ -1,12 +1,40 @@
 import React, { Component } from 'react'
 import { Grid, Menu, Icon, Label } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
+import localforage from 'localforage'
 // import { useRouter } from 'next/router'
 
 
 export default class Layout extends Component {
   state = {
-    activeItem: 'home'
+    activeItem: 'home',
+    sudah_login: 0,
+    pengguna: {}
+  }
+
+  cekLogin = () => {
+    localforage.getItem('sudah_login', (err, value)=>{
+      if(value === 1){
+        //sudah login
+        this.setState({
+          ...this.state,
+          sudah_login: 1
+        },()=>{
+          localforage.getItem('pengguna', (err, value)=>{
+            console.log(value)
+            this.setState({
+              ...this.state,
+              pengguna: value
+            },()=>{
+              console.log(this.state.sudah_login)
+              console.log(this.state.pengguna)
+            })
+          })
+        })
+      }else{
+        //belum login
+      }
+    })
   }
 
   componentDidMount = () => {
@@ -21,6 +49,8 @@ export default class Layout extends Component {
         })
       }
     }
+
+    this.cekLogin()
   }
 
   handleClick = (tipe) => {
@@ -46,7 +76,7 @@ export default class Layout extends Component {
             
             <Grid style={{marginTop:'64px'}}>
               <Grid.Column computer={4} only='computer'>
-                <Menu secondary pointing vertical style={{width:'100%'}}>
+                <Menu secondary pointing vertical style={{width:'100%'}} className="menuUtama">
                   <Menu.Item
                     name="home"
                     onClick={()=>this.handleClick('home')}
@@ -63,14 +93,36 @@ export default class Layout extends Component {
                     <Label style={{display:'none'}}>&nbsp;</Label>
                     <Icon name='grid layout' style={{fontSize:'16px'}} /> Kategori
                   </Menu.Item>
+                  {this.state.sudah_login === 1 &&
                   <Menu.Item
-                    name='Perpustakaan Anda'
+                    name='Perpustakaan'
                     onClick={()=>this.handleClick('perpustakaan')}
                     active={activeItem === 'perpustakaan'}
                   >
                     <Label style={{display:'none'}}>&nbsp;</Label>
-                    <Icon name='favorite' style={{fontSize:'16px'}} /> Perpustakaan Anda
+                    <Icon name='favorite' style={{fontSize:'16px'}} /> Perpustakaan
                   </Menu.Item>
+                  }
+                  {this.state.sudah_login === 1 &&
+                  <Menu.Item
+                    name='Profil Anda'
+                    onClick={()=>this.handleClick('profil')}
+                    active={activeItem === 'profil'}
+                  >
+                    <Label style={{display:'none'}}>&nbsp;</Label>
+                    <Icon name='user' style={{fontSize:'16px'}} /> Profil Anda
+                  </Menu.Item>
+                  }
+                  {this.state.sudah_login === 1 &&
+                  <Menu.Item
+                    name='Pengaturan'
+                    onClick={()=>this.handleClick('pengaturan')}
+                    active={activeItem === 'pengaturan'}
+                  >
+                    <Label style={{display:'none'}}>&nbsp;</Label>
+                    <Icon name='setting' style={{fontSize:'16px'}} /> Pengaturan
+                  </Menu.Item>
+                  }
                 </Menu>
               </Grid.Column>
               <Grid.Column computer={12} mobile={16} tablet={16}>
