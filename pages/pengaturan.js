@@ -6,25 +6,26 @@ import 'semantic-ui-css/semantic.min.css'
 import Layout from './components/Layout'
 import Navbar from './components/Navbar'
 import { withRouter } from 'next/router'
+import CardKategori from './components/cardKategori'
 
-class Perpustakaan extends Component {
+class Kategori extends Component {
   render() {
     return (
       <div className="container">
         <Head>
-          <title>KitaCerita - Perpustakaan</title>
+          <title>KitaCerita - Pengaturan</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Navbar />
         <Layout>
-          <h2>Perpustakaan</h2>
+          <h2>Pengaturan</h2>
         </Layout>
       </div>
     )
   }
 }
 
-export default withRouter(Perpustakaan)
+export default withRouter(Kategori)
 
 // export default function Beranda() {
 //   return (

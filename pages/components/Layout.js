@@ -21,13 +21,13 @@ export default class Layout extends Component {
           sudah_login: 1
         },()=>{
           localforage.getItem('pengguna', (err, value)=>{
-            console.log(value)
+            // console.log(value)
             this.setState({
               ...this.state,
               pengguna: value
             },()=>{
-              console.log(this.state.sudah_login)
-              console.log(this.state.pengguna)
+              // console.log(this.state.sudah_login)
+              // console.log(this.state.pengguna)
             })
           })
         })
@@ -38,7 +38,7 @@ export default class Layout extends Component {
   }
 
   componentDidMount = () => {
-    console.log(window.location.href.split('/'))
+    // console.log(window.location.href.split('/'))
 
     let urls = window.location.href.split('/')
 
@@ -53,15 +53,21 @@ export default class Layout extends Component {
     this.cekLogin()
   }
 
-  handleClick = (tipe) => {
+  handleClick = (tipe, url = null) => {
     this.setState({
       activeItem: tipe
     },()=>{
-      if(tipe !== 'home'){
-        window.location.href="/"+tipe
+
+      if(!url){
+        if(tipe !== 'home'){
+          window.location.href="/"+tipe
+        }else{
+          window.location.href="/"
+        }
       }else{
-        window.location.href="/"
+        window.location.href=url
       }
+
     })
   }
 
@@ -93,6 +99,14 @@ export default class Layout extends Component {
                     <Label style={{display:'none'}}>&nbsp;</Label>
                     <Icon name='grid layout' style={{fontSize:'16px'}} /> Kategori
                   </Menu.Item>
+                  <Menu.Item
+                    name='Aktivitas'
+                    onClick={()=>this.handleClick('aktivitas')}
+                    active={activeItem === 'aktivitas'}
+                  >
+                    <Label style={{display:'none'}}>&nbsp;</Label>
+                    <Icon name='hashtag' style={{fontSize:'16px'}} /> Aktivitas
+                  </Menu.Item>
                   {this.state.sudah_login === 1 &&
                   <Menu.Item
                     name='Perpustakaan'
@@ -106,7 +120,7 @@ export default class Layout extends Component {
                   {this.state.sudah_login === 1 &&
                   <Menu.Item
                     name='Profil Anda'
-                    onClick={()=>this.handleClick('profil')}
+                    onClick={()=>this.handleClick('profil', '/profil/'+this.state.pengguna.pengguna_id)}
                     active={activeItem === 'profil'}
                   >
                     <Label style={{display:'none'}}>&nbsp;</Label>

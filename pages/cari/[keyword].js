@@ -12,10 +12,21 @@ class Keyword extends Component {
   }
 
   componentDidMount = () => {
-    const { router } = this.props
-    console.log(router.query.Keyword)
-
+    // const { router } = this.props
+    // console.log(this.props.router.events)
+    // console.log(this.props.router.events.on)
     // console.log(this.props.url.query)
+
+    this.props.router.events.on('routeChangeComplete',()=>{
+      // console.log(this.props.router.query.keyword)
+      this.setState({
+        params:{
+          ...this.state.params,
+          keyword: this.props.router.query.keyword
+        }
+      })
+    })
+    
   }
 
   render() {

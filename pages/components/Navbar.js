@@ -29,7 +29,9 @@ import localforage from 'localforage'
 
 class Navbar extends Component {
   state = {
-    loading: false
+    loading: false,
+    sudah_login: 0,
+    pengguna: {}
   }
 
   devBorder = {
@@ -55,8 +57,7 @@ class Navbar extends Component {
             this.setState({
               pengguna: value
             },()=>{
-              // console.log(this.state.sudah_login)
-              // console.log(this.state.pengguna)
+              
             })
           })
         })
@@ -120,9 +121,9 @@ class Navbar extends Component {
                 }
                 {this.state.sudah_login === 1 &&
                 <>
-                  <Button style={{display:'inline-flex', padding:'0px', background:'white'}}>
+                  <Button onClick={()=>window.location.href="/profil/"+this.state.pengguna.pengguna_id} style={{display:'inline-flex', padding:'0px', background:'white'}}>
                     <div style={{textAlign:'right', marginRight:'8px', marginTop:'0px', fontWeight:'normal',  height:'40px', lineHeight:'40px'}}>
-                      Nama Penggunanya
+                      {this.state.pengguna.nama}
                     </div>
                     <div style={{
                       borderRadius:'50%', 

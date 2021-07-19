@@ -1,1 +1,5 @@
-export { login, updateWindowDimension } from './app.actions'
+export { 
+  login, 
+  updateWindowDimension, 
+  getPengguna 
+} from './app.actions'
