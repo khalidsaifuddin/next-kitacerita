@@ -22,6 +22,7 @@ class Kategori extends Component {
     kategori: {
       rows: []
     },
+    total_cerita: 0,
     rumpun_kategori_id_aktif: (getParameterByName('rumpun', this.props.router.asPath) ? getParameterByName('rumpun', this.props.router.asPath) : null)
   }
 
@@ -45,6 +46,16 @@ class Kategori extends Component {
         kategori: result.data
       },()=>{
         console.log(this.state.kategori)
+
+        let total_cerita = 0
+
+        this.state.kategori.rows.map((option)=>{
+          total_cerita = total_cerita+parseInt(option.jumlah_cerita > 0 ? option.jumlah_cerita : 0)
+        })
+
+        this.setState({
+          total_cerita: total_cerita
+        })
       })
     })
   }
@@ -70,7 +81,7 @@ class Kategori extends Component {
         rumpun_kategori_id_aktif: null
       },()=>{
         window.history.pushState('','','/kategori')
-        
+
         KategoriActions.getKategori({...this.state.params, rumpun_kategori_id: this.state.rumpun_kategori_id_aktif}, config.api_base).then((result)=>{
           this.setState({
             kategori: result.data
@@ -109,6 +120,9 @@ class Kategori extends Component {
           </Card>
 
           <Grid style={{padding:'8px'}}>
+            <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
+              <CardKategori minWidth={'100%'} maxWidth={'100%'} margin={'0px'} record={{kategori_id:'semua', nama:'Semua', jumlah_cerita: this.state.total_cerita, rumpun_kategori: 'Semua'}} />
+            </Grid.Column>
             {this.state.kategori.rows.map((option)=>{
               return (
                 <Grid.Column mobile={16} tablet={8} computer={4} style={{padding:'8px'}}>
