@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Grid, Menu, Icon, Label } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import localforage from 'localforage'
+import cekLogin from '../../functions/app_functions'
 // import { useRouter } from 'next/router'
 
 
@@ -12,30 +13,30 @@ export default class Layout extends Component {
     pengguna: {}
   }
 
-  cekLogin = () => {
-    localforage.getItem('sudah_login', (err, value)=>{
-      if(value === 1){
-        //sudah login
-        this.setState({
-          ...this.state,
-          sudah_login: 1
-        },()=>{
-          localforage.getItem('pengguna', (err, value)=>{
-            // console.log(value)
-            this.setState({
-              ...this.state,
-              pengguna: value
-            },()=>{
-              // console.log(this.state.sudah_login)
-              // console.log(this.state.pengguna)
-            })
-          })
-        })
-      }else{
-        //belum login
-      }
-    })
-  }
+  // cekLogin = () => {
+  //   localforage.getItem('sudah_login', (err, value)=>{
+  //     if(value === 1){
+  //       //sudah login
+  //       this.setState({
+  //         ...this.state,
+  //         sudah_login: 1
+  //       },()=>{
+  //         localforage.getItem('pengguna', (err, value)=>{
+  //           // console.log(value)
+  //           this.setState({
+  //             ...this.state,
+  //             pengguna: value
+  //           },()=>{
+  //             // console.log(this.state.sudah_login)
+  //             // console.log(this.state.pengguna)
+  //           })
+  //         })
+  //       })
+  //     }else{
+  //       //belum login
+  //     }
+  //   })
+  // }
 
   componentDidMount = () => {
     // console.log(window.location.href.split('/'))
@@ -50,7 +51,14 @@ export default class Layout extends Component {
       }
     }
 
-    this.cekLogin()
+    // this.cekLogin()
+    cekLogin().then((value)=>{
+      this.setState({
+        ...this.state,
+        ...value
+      })
+    })
+
   }
 
   handleClick = (tipe, url = null) => {

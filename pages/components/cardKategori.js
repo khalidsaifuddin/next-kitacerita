@@ -14,9 +14,9 @@ export default class CardKategori extends Component {
     return (
       <Card fluid style={this.style}>
         <Card.Content style={{padding:'8px', flexGrow:'inherit'}}>
-          <Card.Header style={{fontSize:'14px', color: (this.props.gradient ? '#ffffff' : '#434343')}}>Nama Kategori</Card.Header>
+          <Card.Header style={{fontSize:'14px', color: (this.props.gradient ? '#ffffff' : '#434343')}}>{this.props.record ? this.props.record.nama : '-'}</Card.Header>
           <Card.Meta>
-            <span className='date' style={{fontSize:'12px', color: (this.props.gradient ? '#ffffff' : '#434343')}}>10 Cerita</span>
+            <span className='date' style={{fontSize:'12px', color: (this.props.gradient ? '#ffffff' : '#434343')}}>{this.props.record ? this.props.record.rumpun_kategori : '-'} - 0 Cerita</span>
           </Card.Meta>
         </Card.Content>
       </Card>

@@ -4,6 +4,7 @@ import { Container, Grid, Search, Button, Icon } from 'semantic-ui-react'
 import '../../styles/global.module.css'
 import 'semantic-ui-css/semantic.min.css'
 import localforage from 'localforage'
+import cekLogin from '../../functions/app_functions'
 
 // const initialState = {
 //   loading: false
@@ -45,27 +46,27 @@ class Navbar extends Component {
     paddingTop:'8px'
   }
 
-  cekLogin = () => {
-    localforage.getItem('sudah_login', (err, value)=>{
-      if(value === 1){
-        //sudah login
-        this.setState({
-          sudah_login: 1
-        },()=>{
-          localforage.getItem('pengguna', (err, value)=>{
-            // console.log(value)
-            this.setState({
-              pengguna: value
-            },()=>{
+  // cekLogin = () => {
+  //   localforage.getItem('sudah_login', (err, value)=>{
+  //     if(value === 1){
+  //       //sudah login
+  //       this.setState({
+  //         sudah_login: 1
+  //       },()=>{
+  //         localforage.getItem('pengguna', (err, value)=>{
+  //           // console.log(value)
+  //           this.setState({
+  //             pengguna: value
+  //           },()=>{
               
-            })
-          })
-        })
-      }else{
-        //belum login
-      }
-    })
-  }
+  //           })
+  //         })
+  //       })
+  //     }else{
+  //       //belum login
+  //     }
+  //   })
+  // }
 
   handleKeyPress = (event) => {
     
@@ -76,7 +77,14 @@ class Navbar extends Component {
   }
 
   componentDidMount = () => {
-    this.cekLogin()
+    // this.cekLogin()
+    
+    cekLogin().then((value)=>{
+      this.setState({
+        ...this.state,
+        ...value
+      })
+    })
   }
   
   render(){

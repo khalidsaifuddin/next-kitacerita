@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar'
 import { withRouter } from 'next/router'
 import config from '../../config'
 import * as AppActions from '../../store/actions/app.actions'
+import cekLogin from '../../functions/app_functions'
 
 class Profil extends Component {
   state = {
@@ -15,33 +16,39 @@ class Profil extends Component {
     pengguna: {}
   }
 
-  cekLogin = () => {
-    localforage.getItem('sudah_login', (err, value)=>{
-      if(value === 1){
-        //sudah login
-        this.setState({
-          sudah_login: 1
-        },()=>{
-          localforage.getItem('pengguna', (err, value)=>{
-            // console.log(value)
-            this.setState({
-              pengguna: value
-            },()=>{
+  // cekLogin = () => {
+  //   localforage.getItem('sudah_login', (err, value)=>{
+  //     if(value === 1){
+  //       //sudah login
+  //       this.setState({
+  //         sudah_login: 1
+  //       },()=>{
+  //         localforage.getItem('pengguna', (err, value)=>{
+  //           // console.log(value)
+  //           this.setState({
+  //             pengguna: value
+  //           },()=>{
               
-            })
-          })
-        })
-      }else{
-        //belum login
-      }
-    })
-  }
+  //           })
+  //         })
+  //       })
+  //     }else{
+  //       //belum login
+  //     }
+  //   })
+  // }
 
   componentDidMount = () => {
     // const { router } = this.props
     // console.log(router.query.pengguna_id)
 
     // console.log(this.props)
+    cekLogin().then((value)=>{
+      this.setState({
+        ...this.state,
+        ...value
+      })
+    })
 
     this.props.router.events.on('routeChangeComplete',()=>{
       // console.log(this.props.router.query.keyword)

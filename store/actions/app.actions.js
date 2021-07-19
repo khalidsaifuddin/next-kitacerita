@@ -21,14 +21,6 @@ export async function login(params, api_base){
     });
 
     return request
-
-    // return (dispatch) =>
-    //  request.then((response) =>
-    //    dispatch({
-    //      payload: response.data,
-    //        params
-    //      })
-    //  );
 }
 
 export async function getPengguna(params, api_base){
