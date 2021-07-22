@@ -8,6 +8,7 @@ import { withRouter } from 'next/router'
 import * as KategoriActions from '../../store/actions/kategori.actions'
 import * as CeritaActions from '../../store/actions/cerita.actions'
 import config from '../../config'
+import CardBuku from '../components/cardBuku'
 
 class Cerita extends Component {
   state = {
@@ -54,13 +55,23 @@ class Cerita extends Component {
     return (
       <div className="container">
         <Head>
-          <title>KitaCerita - Cerita ({this.state.kategori.nama})</title>
+          <title>KitaCerita - Cerita ({this.state.kategori.nama ? this.state.kategori.nama : 'Semua'})</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Navbar />
         <Layout>
           <h2>{this.state.kategori.nama ? <span>Cerita {this.state.kategori.nama}</span> : 'Semua Cerita'}</h2>
-
+          {/* <div style={{display:'inline-flex', flexWrap:'wrap'}}> */}
+          <Grid>
+            {this.state.cerita.rows.map((option)=>{
+              return (
+                <Grid.Column computer={4} tablet={4} mobile={8} style={{padding:'8px'}}>
+                  <CardBuku fluid record={option} />
+                </Grid.Column>
+              )
+            })}
+          </Grid>
+          {/* </div> */}
         </Layout>
       </div>
     )
