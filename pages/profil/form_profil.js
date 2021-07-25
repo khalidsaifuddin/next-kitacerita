@@ -11,6 +11,7 @@ import * as AppActions from '../../store/actions/app.actions'
 import cekLogin from '../../functions/app_functions'
 import getParameterByName from '../../functions/param_function'
 import CardPenulis from '../components/cardPenulis'
+import CardMessage from '../components/cardMessage'
 import moment from 'moment'
 import 'moment/locale/id'
 
@@ -20,6 +21,12 @@ class FormProfil extends Component {
     params: {
       tanggal_lahir: ''
     },
+    tampilPesan: false,
+    judulPesan: '',
+    pesanPesan: '',
+    positive: false,
+    negative: false,
+    sudah_submit: false,
     pengguna: {},
     GenderOptions: [
       {key: 'L', value: 'L', text: 'Laki-laki'},
@@ -110,6 +117,26 @@ class FormProfil extends Component {
     })
   }
 
+  submitForm = () => {
+    // alert('tes')
+    this.setState({
+      sudah_submit: true
+    },()=>{
+      if(!this.state.params.nama_depan || !this.state.params.nama_belakang || !this.state.params.jenis_kelamin || !this.state.params.tempat_lahir || !this.state.params.tanggal_lahir){
+        this.setState({
+          tampilPesan: true,
+          judulPesan: 'Form tidak lengkap!',
+          pesanPesan: 'Mohon lengkapi semua isian form sebelum menyimpan!',
+          negative: true
+        },()=>{
+          console.log(this.state)
+        })
+        return true
+      }
+    })
+    
+  }
+
   render() {
     const { router } = this.props
     const { pengguna, loading, GenderOptions } = this.state
@@ -124,24 +151,24 @@ class FormProfil extends Component {
         <Layout>
           <CardPenulis penulis={pengguna} noFollowPanel />
           <h3>Edit Profil</h3>
-          <Form>
-            <Form.Field>
+          <Form onSubmit={this.submitForm}>
+            <Form.Field error={this.state.sudah_submit && !this.state.params.nama_depan}>
               <label>Nama Depan</label>
               <input value={this.state.params.nama_depan} placeholder='Nama Depan' onChange={this.setValueField('nama_depan')} />
             </Form.Field>
-            <Form.Field>
+            <Form.Field error={this.state.sudah_submit && !this.state.params.nama_belakang}>
               <label>Nama Belakang</label>
               <input value={this.state.params.nama_belakang} placeholder='Nama Belakang' onChange={this.setValueField('nama_belakang')}/>
             </Form.Field>
-            <Form.Field>
+            <Form.Field error={this.state.sudah_submit && !this.state.params.jenis_kelamin}>
               <label>Gender</label>
               <Dropdown fluid selection placeholder='Pilih Gender...' options={GenderOptions} onChange={this.setValueSelect('jenis_kelamin')} />
             </Form.Field>
-            <Form.Field>
+            <Form.Field error={this.state.sudah_submit && !this.state.params.tempat_lahir}>
               <label>Tempat Lahir</label>
               <input value={this.state.params.tempat_lahir} placeholder='Tempat Lahir' onChange={this.setValueField('tempat_lahir')}/>
             </Form.Field>
-            <Form.Field>
+            <Form.Field error={this.state.sudah_submit && !this.state.params.tanggal_lahir}>
               <label>Tanggal Lahir</label>
               <DateInput
                 clearable
@@ -154,6 +181,9 @@ class FormProfil extends Component {
                 placeholder={'Tanggal Lahir...'}
               />
             </Form.Field>
+            {this.state.tampilPesan &&
+            <CardMessage judul={this.state.judulPesan} pesan={this.state.pesanPesan} />
+            }
             <br/>
             {this.TombolSimpan()}
 
