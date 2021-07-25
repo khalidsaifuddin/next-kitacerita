@@ -9,12 +9,24 @@ import { withRouter } from 'next/router'
 import CardBuku from './components/cardBuku'
 import CardKategori from './components/cardKategori'
 import * as AppActions from '../store/actions/app.actions'
+import * as CeritaActions from '../store/actions/cerita.actions'
+import * as KategoriActions from '../store/actions/kategori.actions'
+import config from '../config'
 
 class Beranda extends Component {
   
   state = {
+    loading: true,
     params: {
-      foo: 'bar'
+      foo: 'bar',
+      dengan_bab_cerita: 'Y'
+    },
+    arrLoading: [1,2,3,4],
+    cerita: {
+      rows:[  ]
+    },
+    kategori: {
+      rows:[  ]
     }
   }
 
@@ -36,10 +48,35 @@ class Beranda extends Component {
     '#757575'
   ]
 
+  loadInitialData = () => {
+    CeritaActions.getCerita({...this.state.params, limit:10}, config.api_base).then((result)=>{
+      this.setState({
+        loading: false,
+        cerita: result.data
+      })
+    })
+
+    KategoriActions.getKategori({...this.state.params, limit:10}, config.api_base).then((result)=>{
+      this.setState({
+        kategori: result.data
+      })
+    })
+  }
+
   componentDidMount = () => {
-    // console.log(AppActions.updateWindowDimension)
-    // console.log(AppActions)
-    // AppActions.login(this.state.params)
+    this.loadInitialData()
+  }
+
+  showLoadingCard = () => {
+    return (
+      <>{this.state.loading &&
+      <>{this.state.arrLoading.map((option)=>{
+        return (
+          <CardBuku placeholder />
+        )            
+      })}</>
+      }</>
+    )
   }
 
   render() {
@@ -47,41 +84,38 @@ class Beranda extends Component {
       <Layout>
         <h2 style={{marginBottom:'0px'}}>Rekomendasi</h2>
         <div className="etalaseBuku">
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
+          {this.showLoadingCard()}
+          {this.state.cerita.rows.map((option)=>{
+            return (
+              <CardBuku record={option} key={option.cerita_id} />
+            )
+          })}
         </div>
         <h2 style={{marginBottom:'0px'}}>Kategori</h2>
         <div className="etalaseBuku">
-          {this.gradient.map((option)=>{
+          {this.state.kategori.rows.map((option)=>{
             return (
-              <CardKategori gradient={option} />
+              <CardKategori record={option} key={option.kategori_id} />
             )
           })}
         </div>
         <h2 style={{marginBottom:'0px'}}>Rilis Terbaru</h2>
         <div className="etalaseBuku">
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
+          {this.showLoadingCard()}
+          {this.state.cerita.rows.map((option)=>{
+            return (
+              <CardBuku record={option} key={option.cerita_id} />
+            )
+          })}
         </div>
         <h2 style={{marginBottom:'0px'}}>Top Rating</h2>
         <div className="etalaseBuku">
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
-          <CardBuku data={{foo:'bar'}} />
+          {this.showLoadingCard()}
+          {this.state.cerita.rows.map((option)=>{
+            return (
+              <CardBuku record={option} key={option.cerita_id} />
+            )
+          })}
         </div>
       </Layout>
     )
