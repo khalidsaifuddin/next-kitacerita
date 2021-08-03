@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Message } from 'semantic-ui-react'
 
-export default class CardMessage extends Component {
+export default class CardMessageError extends Component {
 
   state = {
     pesan: (this.props.pesan ? this.props.pesan : ''),
@@ -11,7 +11,7 @@ export default class CardMessage extends Component {
   render(){
 
     return (
-      <Message positive>
+      <Message negative>
         <Message.Header>{this.state.judul}</Message.Header>
         <p>
           {this.state.pesan}

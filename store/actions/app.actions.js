@@ -30,3 +30,19 @@ export async function getPengguna(params, api_base){
 
     return request
 }
+
+export async function simpanIdentitasPengguna(params, api_base){
+    const request = await axios.post(api_base+'/identitas_pengguna', {
+        ...params
+    });
+
+    return request
+}
+
+export async function getIdentitasPengguna(params, api_base){
+    const request = await axios.get(api_base+'/identitas_pengguna', {
+        params: params
+    });
+
+    return request
+}

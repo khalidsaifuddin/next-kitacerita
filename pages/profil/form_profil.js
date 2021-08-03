@@ -12,6 +12,7 @@ import cekLogin from '../../functions/app_functions'
 import getParameterByName from '../../functions/param_function'
 import CardPenulis from '../components/cardPenulis'
 import CardMessage from '../components/cardMessage'
+import CardMessageError from '../components/cardMessageError'
 import moment from 'moment'
 import 'moment/locale/id'
 
@@ -22,12 +23,14 @@ class FormProfil extends Component {
       tanggal_lahir: ''
     },
     tampilPesan: false,
+    tampilPesanError: false,
     judulPesan: '',
     pesanPesan: '',
     positive: false,
     negative: false,
     sudah_submit: false,
     pengguna: {},
+    identitas_pengguna: {},
     GenderOptions: [
       {key: 'L', value: 'L', text: 'Laki-laki'},
       {key: 'P', value: 'P', text: 'Perempuan'}
@@ -44,6 +47,7 @@ class FormProfil extends Component {
 
     this.props.router.events.on('routeChangeComplete',()=>{
       this.setState({
+        loading: false, 
         params:{
           ...this.state.params,
           pengguna_id: (getParameterByName('pengguna_id', this.props.router.asPath) ? getParameterByName('pengguna_id', this.props.router.asPath) : null)
@@ -51,26 +55,90 @@ class FormProfil extends Component {
       },()=>{
         // console.log(this.state.params)
         AppActions.getPengguna(this.state.params, config.api_base).then((result)=>{
-          console.log(result.data.rows)
-
+          // console.log(result.data.rows)
           if(result.data.result > 0){
             this.setState({
               loading: false,
               pengguna: result.data.rows[0]
+            },()=>{
+              AppActions.getIdentitasPengguna(this.state.params, config.api_base).then((result)=>{
+                if(result.data.result > 0){
+                  this.setState({
+                    loading: false,
+                    identitas_pengguna: result.data.rows[0]
+                  },()=>{
+                    this.setState({
+                      params: {
+                        ...this.state.params,
+                        ...this.state.identitas_pengguna
+                      }
+                    })
+                  })
+                }else{
+                  this.setState({
+                    loading: false,
+                    identitas_pengguna: {
+                      nama_depan: (this.state.pengguna.nama ? this.state.pengguna.nama.split(" ")[0] : ''),
+                      nama_belakang: (this.state.pengguna.nama ? this.state.pengguna.nama.split(" ")[1] : '')
+                    }
+                  },()=>{
+                    this.setState({
+                      params: {
+                        ...this.state.params,
+                        ...this.state.identitas_pengguna
+                      }
+                    })
+                  })
+                }
+              })
             })
           }
-
         })
       })
     })
-
+  }
+  
+  simpan = () => {
+    // alert(JSON.stringify(this.state.params))
+    this.setState({
+      loading: true
+    },()=>{
+      AppActions.simpanIdentitasPengguna(this.state.params, config.api_base).then((result)=>{
+        // console.log(result)
+        if(result.data.success){
+          //berhasil
+          this.setState({
+            loading: false,
+            tampilPesan: true,
+            tampilPesanError: false,
+            pesanPesan: 'Berhasil menyimpan data!'
+          })
+        }else{
+          //gagal
+          this.setState({
+            loading: false,
+            tampilPesanError: true,
+            tampilPesan: false,
+            pesanPesan: 'Gagal menyimpan data!'
+          })
+        }
+      }).catch(()=>{
+        //gagal exception
+        this.setState({
+          loading: false,
+          tampilPesanError: true,
+          tampilPesan: false,
+          pesanPesan: 'Ada kesalahan teknis!'
+        })
+      })
+    })
   }
 
   TombolSimpan = () => {
     return (
-      <Button type="submit" color={'green'}>
+      <Button type="submit" color={'green'} onClick={this.simpan} loading={this.state.loading}>
         <Icon name="save" />
-        Simpan
+        {this.state.loading ? 'Menyimpan...' : 'Simpan'}
       </Button>
     )
   }
@@ -154,19 +222,19 @@ class FormProfil extends Component {
           <Form onSubmit={this.submitForm}>
             <Form.Field error={this.state.sudah_submit && !this.state.params.nama_depan}>
               <label>Nama Depan</label>
-              <input value={this.state.params.nama_depan} placeholder='Nama Depan' onChange={this.setValueField('nama_depan')} />
+              <input disabled={this.state.loading} value={this.state.params.nama_depan} placeholder='Nama Depan' onChange={this.setValueField('nama_depan')} />
             </Form.Field>
             <Form.Field error={this.state.sudah_submit && !this.state.params.nama_belakang}>
               <label>Nama Belakang</label>
-              <input value={this.state.params.nama_belakang} placeholder='Nama Belakang' onChange={this.setValueField('nama_belakang')}/>
+              <input disabled={this.state.loading} value={this.state.params.nama_belakang} placeholder='Nama Belakang' onChange={this.setValueField('nama_belakang')}/>
             </Form.Field>
             <Form.Field error={this.state.sudah_submit && !this.state.params.jenis_kelamin}>
               <label>Gender</label>
-              <Dropdown fluid selection placeholder='Pilih Gender...' options={GenderOptions} onChange={this.setValueSelect('jenis_kelamin')} />
+              <Dropdown value={this.state.params.jenis_kelamin} fluid selection placeholder='Pilih Gender...' options={GenderOptions} onChange={this.setValueSelect('jenis_kelamin')} />
             </Form.Field>
             <Form.Field error={this.state.sudah_submit && !this.state.params.tempat_lahir}>
               <label>Tempat Lahir</label>
-              <input value={this.state.params.tempat_lahir} placeholder='Tempat Lahir' onChange={this.setValueField('tempat_lahir')}/>
+              <input disabled={this.state.loading} value={this.state.params.tempat_lahir} placeholder='Tempat Lahir' onChange={this.setValueField('tempat_lahir')}/>
             </Form.Field>
             <Form.Field error={this.state.sudah_submit && !this.state.params.tanggal_lahir}>
               <label>Tanggal Lahir</label>
@@ -184,9 +252,11 @@ class FormProfil extends Component {
             {this.state.tampilPesan &&
             <CardMessage judul={this.state.judulPesan} pesan={this.state.pesanPesan} />
             }
+            {this.state.tampilPesanError &&
+            <CardMessageError judul={this.state.judulPesan} pesan={this.state.pesanPesan} />
+            }
             <br/>
             {this.TombolSimpan()}
-
           </Form>
         </Layout>
       </div>
